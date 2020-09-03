@@ -1,0 +1,57 @@
+.infoCard {
+    flex: 1;
+    cursor: pointer;
+    border-top: 10px solid #fff;
+    position: relative;
+}
+
+.infoCard:not(:last-child) {
+    margin-right: 15px;
+}
+
+.infoCard__title {
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+.infoCard__cases {
+    color: #cc1034;
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin-top: 1.7rem;
+    margin-bottom: 0.5rem;
+}
+
+.infoCard__recovered {
+    margin-top: 30px;
+}
+
+.infoCard__total {
+    color: #6c757d !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    margin-top: 15px !important;
+}
+
+.infoCard--active {
+    border-top: 10px solid rgba(255, 0, 0, 0.6);
+}
+.infoCard--active.green {
+    border-color: rgba(0, 255, 0, 0.5);
+}
+
+@media (max-width: 400px) {
+    .infoCard__title {
+        font-size: 0.8rem !important;
+        font-weight: bold;
+    }
+}
+@media (max-width: 850px) {
+    .infoCard__cases {
+        margin-top: 2rem;
+    }
+    .infoCard:not(:last-child) {
+        margin-right: 7px;
+    }
+}
