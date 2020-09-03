@@ -7,6 +7,7 @@ import { Card, CardContent } from "@material-ui/core"
 import Table from "./components/Table"
 import LineGraph from "./components/LineGraph"
 import "leaflet/dist/leaflet.css"
+import Slider from "./components/Slider"
 
 function App() {
     const [countriesData, setCountriesData] = useState([])
@@ -21,6 +22,7 @@ function App() {
     const [casesType, setCasesType] = useState("cases")
 
     const [mapZoom, setMapZoom] = useState(3)
+    const [lastDaysForHistory, setLastDaysForHistory] = useState(120)
 
     async function getStats(country) {
         let url = `https://disease.sh/v3/covid-19/${
@@ -96,6 +98,7 @@ function App() {
         selectCountry(e.target.value)
         getStats(e.target.value)
     }
+    const country = countriesData.find((country) => country.code === selectedCountry)
     return (
         <div className="app">
             <div className="app_main">
@@ -139,9 +142,19 @@ function App() {
                 <CardContent>
                     <h3>Live Cases By Country</h3>
                     <Table tableData={tableData} />
-                    <h3 style={{ marginTop: "20px" }}>Worldwide new {casesType}</h3>
+                    <h3 style={{ marginTop: "20px" }}>
+                        {selectedCountry === "all"
+                            ? "Worldwide "
+                            : country && country.name + " "}
+                        new {casesType}
+                    </h3>
 
-                    <LineGraph casesType={casesType} />
+                    <LineGraph
+                        casesType={casesType}
+                        lastdays={lastDaysForHistory}
+                        selectedCountry={selectedCountry}
+                    />
+                    <Slider value={lastDaysForHistory} onChange={setLastDaysForHistory} />
                 </CardContent>
             </Card>
         </div>

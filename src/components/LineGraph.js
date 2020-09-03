@@ -46,32 +46,48 @@ const options = {
     },
 }
 
-function LineGraph({ casesType }) {
+function LineGraph({ casesType, selectedCountry, lastdays }) {
     const [chartData, setChartData] = useState([])
 
     useEffect(() => {
-        const getHistoryData = async (lastdays, casesType = "cases") => {
+        const getHistoryData = async () => {
             const res = await fetch(
-                `https://disease.sh/v3/covid-19/historical/all?lastdays=${lastdays}`
+                `https://disease.sh/v3/covid-19/historical/${selectedCountry}?lastdays=${lastdays}`
             )
             const data = await res.json()
             let chartPoints = []
             let previousDate
 
-            for (let date in data[casesType]) {
-                if (previousDate)
-                    chartPoints.push({
-                        x: date,
-                        y: data[casesType][date] - data[casesType][previousDate],
-                    })
+            if (selectedCountry === "all") {
+                if (data.cases)
+                    for (let date in data[casesType]) {
+                        if (previousDate)
+                            chartPoints.push({
+                                x: date,
+                                y: data[casesType][date] - data[casesType][previousDate],
+                            })
 
-                previousDate = date
+                        previousDate = date
+                    }
+            } else {
+                if (data.timeline)
+                    for (let date in data.timeline[casesType]) {
+                        if (previousDate)
+                            chartPoints.push({
+                                x: date,
+                                y:
+                                    data.timeline[casesType][date] -
+                                    data.timeline[casesType][previousDate],
+                            })
+
+                        previousDate = date
+                    }
             }
 
             setChartData(chartPoints)
         }
-        getHistoryData(120, casesType)
-    }, [casesType])
+        getHistoryData()
+    }, [casesType, selectedCountry, lastdays])
     return (
         <div className="linegraph">
             {chartData.length > 0 ? (

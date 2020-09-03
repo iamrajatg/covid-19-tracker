@@ -1,9 +1,19 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Card, CardContent, Typography } from "@material-ui/core"
 import "./InfoCard.css"
 import numeral from "numeral"
+import Countup from "react-countup"
 
 function InfoCard({ title, cases, total, active, onClick }) {
+    const [showCountup, setShowCountup] = useState(true)
+    useEffect(() => {
+        if (!showCountup) setShowCountup(true)
+        if (cases)
+            setTimeout(() => {
+                setShowCountup(false)
+            }, 3000)
+    }, [cases])
+
     return (
         <Card
             className={`infoCard ${active && "infoCard--active"} ${
@@ -16,7 +26,9 @@ function InfoCard({ title, cases, total, active, onClick }) {
                 </Typography>
 
                 <h2 className="infoCard__cases">
-                    +{numeral(cases).format("0a").toUpperCase()}
+                    {cases >= 0 && "+"}
+                    {cases && showCountup && <Countup end={cases} duration={2} />}
+                    {!showCountup && numeral(cases).format("0a").toUpperCase()}
                 </h2>
 
                 <Typography className="infoCard__total" color="primary">
